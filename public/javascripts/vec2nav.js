@@ -1,17 +1,40 @@
+var templates = (function(){
+
+	var compiled = {};
+
+	var parse = function(template,data) {
+		return compiled[template](data);
+	}
+
+	_.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+
+	$("script[type=template]").each(function(){
+		var tmpl = $(this);
+		compiled[tmpl.attr("data-name")] = _.template(tmpl.html());
+	});
+
+	return {
+		parse:parse,
+		group:_.curry(parse)
+	}
+
+
+})();
+
 var vec2nav = (function(){
 	
 	var $word = $("#word");
 	var $wordlist = $("#wordlist");
-
-	var $phrase = $("#phrase");
 	var $phraselist = $("#phraselist");
 
 	var displayWords = function(data) {
-		$wordlist.text(_.pluck(data.d.results,'word'));
+		$wordlist.children().remove()
+		$wordlist.append(data.d.results.map(templates.group("word")));
 	};
 
 	var displayPhrases = function(data) {
-		$phraselist.text(_.pluck(data.d.results,'phrase'));
+		$phraselist.children().remove();
+		$phraselist.append(data.d.results.map(templates.group("phrase")));
 	};
 	
 	var lookupWord = function(){
@@ -19,7 +42,7 @@ var vec2nav = (function(){
 		return function(word) {
 			if(word && word !== last) {
 				last = word;
-				$.get('/words/'+word).done(displayWords);
+				$.get("/words/"+word).done(displayWords);
 			}
 		}
 	}();
@@ -29,11 +52,10 @@ var vec2nav = (function(){
 		return function(word) {
 			if(word && word !== last) {
 				last = word;
-				$.get('/phrases/'+word).done(displayPhrases);
+				$.get("/phrases/"+word).done(displayPhrases);
 			}
 		}
 	}();
-
 
 	var timeout = function(delay,callback) {
 		var id;
@@ -47,13 +69,17 @@ var vec2nav = (function(){
 		}
 	}
 	
-	$("#word").on("keyup",timeout(500,function(e){
+	$word.on("keyup",timeout(500,function(e){
 		lookupWord($word.val());
+		lookupPhrase($word.val());
 	}));
 
-	$("#phrase").on("keyup",timeout(500,function(e){
-		lookupPhrase($phrase.val());
-	}));
+	$(".list").on("click",".word",function(e){
+		var word = $(this).attr("data-value");
+		$word.val(word);
+		lookupWord(word);
+		lookupPhrase(word);
+	});
 
 	return {
 		lookupWord:lookupWord
