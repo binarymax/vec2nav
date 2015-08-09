@@ -3,21 +3,8 @@
 
 <head>
 	<title>Vec2Nav</title>
+	<link rel="stylesheet" href="stylesheets/style.css" />
 </head>
-
-<style type="text/css">
-	* { border-box:0px; font-family:helvetica,arial; }
-	.list { list-style-type: none; margin:0; padding:0;}
-	.word {
-		margin:1em;
-		padding:0.2em;
-		border:1px solid #ccc;
-		background: #eee;
-		border-radius: 2px;
-		margin-left:0;
-		width:20em;
-	}
-</style>
 
 <body>
 
@@ -25,23 +12,33 @@
 
 	<div><input type="text" id="word"></div>
 
-	<section id="words">
-		<h2>Synonyms</h2>
-		<ul id="wordlist" class="list"></ul>
+	<section id="lists">
+	
+		<div id="words">
+			<h2>Synonyms</h2>
+		</div>
+
+		<div id="phrases">
+			<h2>Phrases</h2>
+		</div>
+
 	</section>
 
-	<section id="phrases">
-		<h2>Phrases</h2>
-		<ul id="phraselist" class="list"></ul>
-	</section>
-
-	<script type="template" data-name="word">
-		<li class="word" data-value="{{word}}">{{word}} ({{dist}})</li>
+	<script type="template" data-name="words">
+		<li class="word" data-value="{{word}}">{{word}} ({{dist.toString().substr(0,5)}})</li>
 	</script>
 
-	<script type="template" data-name="phrase">
+	<script type="template" data-name="phrases">
 		<li class="word" data-value="{{phrase}}">{{phrase}}</li>
 	</script>
+
+	<script type="template" data-name="word-list">
+		<div class="group">
+			<h3>{{word}}</h3>
+			<ul class="list"></ul>
+		</div>
+	</script>
+
 
 	<!-- Scripts -->
 	<script type="text/javascript" src="javascripts/jquery-1.11.13.min.js"></script>

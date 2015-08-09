@@ -1,8 +1,29 @@
+* { border-box:0px; }
+
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.group { 
+	display:inline-block; 
+}
+
+.list  { 
+	list-style-type:none; 
+	margin:0; 
+	padding:0; 
+}
+
+.word  {
+	margin:1em;
+	padding:0.2em;
+	border:1px solid #ccc;
+	background: #eee;
+	border-radius: 2px;
+	margin-left:0;
+	width:10em;
 }
